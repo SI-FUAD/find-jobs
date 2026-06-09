@@ -12,7 +12,7 @@ export default function PublicLayout() {
 
       <Navbar />
 
-      <main>
+      <main className="pt-20 min-h-screen">
         <Outlet />
       </main>
 

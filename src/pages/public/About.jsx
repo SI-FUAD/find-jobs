@@ -4,11 +4,39 @@ import {
   Users,
   Globe,
 } from "lucide-react";
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
 import usePageTitle from "../../hooks/usePageTitle";
 
 export default function About() {
   usePageTitle("About Us");
+
+  const location = useLocation();
+
+useEffect(() => {
+  if (location.hash) {
+    const id = location.hash.replace("#", "");
+
+    setTimeout(() => {
+      const element = document.getElementById(id);
+
+      if (element) {
+        const navbarHeight = 90;
+
+        const top =
+          element.getBoundingClientRect().top +
+          window.scrollY -
+          navbarHeight;
+
+        window.scrollTo({
+          top,
+          behavior: "smooth",
+        });
+      }
+    }, 100);
+  }
+}, [location]);
 
   return (
     <div className="bg-[#050816] text-white">
@@ -18,7 +46,7 @@ export default function About() {
 
         <div className="absolute inset-0 bg-linear-to-b from-blue-600/10 to-transparent"></div>
 
-        <div className="max-w-7xl mx-auto px-6 py-30 relative z-10">
+        <div className="max-w-7xl mx-auto px-6 pt-20 pb-20 md:pt-28 relative z-10">
 
           <div className="max-w-4xl">
 
@@ -106,6 +134,148 @@ export default function About() {
         </div>
 
       </section>
+
+      {/* Mission */}
+<section className="border-t border-white/10">
+  <div className="max-w-7xl mx-auto px-6 py-24">
+
+    <div className="grid lg:grid-cols-2 gap-16 items-center">
+
+      <div>
+        <p className="text-blue-400 font-semibold mb-4">
+          Our Mission
+        </p>
+
+        <h2 className="text-4xl md:text-5xl font-black leading-tight mb-6">
+          Building The Future
+          Of Online Recruitment
+        </h2>
+
+        <p className="text-gray-300 leading-relaxed mb-6">
+          We believe job searching should be modern, transparent,
+          and accessible for everyone. Our platform is designed
+          to simplify hiring and help professionals connect
+          with meaningful opportunities.
+        </p>
+
+        <p className="text-gray-400 leading-relaxed">
+          From students and fresh graduates to experienced
+          professionals and global companies, Find Jobs creates
+          a smarter hiring ecosystem powered by simplicity,
+          trust, and technology.
+        </p>
+      </div>
+
+      <div className="grid grid-cols-2 gap-6">
+
+        <div className="bg-white/5 border border-white/10 rounded-3xl p-8">
+          <h3 className="text-4xl font-black text-blue-400 mb-2">
+            10K+
+          </h3>
+
+          <p className="text-gray-400">
+            Job Opportunities
+          </p>
+        </div>
+
+        <div className="bg-white/5 border border-white/10 rounded-3xl p-8">
+          <h3 className="text-4xl font-black text-blue-400 mb-2">
+            5K+
+          </h3>
+
+          <p className="text-gray-400">
+            Companies
+          </p>
+        </div>
+
+        <div className="bg-white/5 border border-white/10 rounded-3xl p-8">
+          <h3 className="text-4xl font-black text-blue-400 mb-2">
+            25K+
+          </h3>
+
+          <p className="text-gray-400">
+            Candidates
+          </p>
+        </div>
+
+        <div className="bg-white/5 border border-white/10 rounded-3xl p-8">
+          <h3 className="text-4xl font-black text-blue-400 mb-2">
+            100+
+          </h3>
+
+          <p className="text-gray-400">
+            Countries Reached
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+{/* Values */}
+<section className="border-t border-white/10">
+  <div className="max-w-7xl mx-auto px-6 py-24">
+
+    <div className="max-w-3xl mb-14">
+      <p className="text-blue-400 font-semibold mb-4">
+        Why Choose Us
+      </p>
+
+      <h2 className="text-4xl md:text-5xl font-black mb-6">
+        Designed For Modern
+        Recruitment Experiences
+      </h2>
+
+      <p className="text-gray-400 leading-relaxed">
+        Our platform combines simplicity, performance,
+        and accessibility to create a seamless hiring
+        experience for both candidates and employers.
+      </p>
+    </div>
+
+    <div className="grid md:grid-cols-3 gap-6">
+
+      <div className="bg-white/5 border border-white/10 rounded-3xl p-8">
+        <h3 className="text-xl font-bold mb-4">
+          Smart Job Discovery
+        </h3>
+
+        <p className="text-gray-400 leading-relaxed">
+          Discover opportunities based on skills,
+          interests, and career goals with an
+          intuitive search experience.
+        </p>
+      </div>
+
+      <div className="bg-white/5 border border-white/10 rounded-3xl p-8">
+        <h3 className="text-xl font-bold mb-4">
+          Secure & Reliable
+        </h3>
+
+        <p className="text-gray-400 leading-relaxed">
+          We prioritize user privacy, secure data
+          handling, and trusted employer verification.
+        </p>
+      </div>
+
+      <div className="bg-white/5 border border-white/10 rounded-3xl p-8">
+        <h3 className="text-xl font-bold mb-4">
+          Global Opportunities
+        </h3>
+
+        <p className="text-gray-400 leading-relaxed">
+          Connect with companies and professionals
+          across multiple industries and regions.
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+</section>
 
       {/* Privacy */}
       <section

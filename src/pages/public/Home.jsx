@@ -36,7 +36,7 @@ export default function Home() {
 
         <div className="max-w-7xl mx-auto px-4 w-full">
 
-          <div className="max-w-4xl mt-5 sm:mt-20">
+          <div className="max-w-4xl">
 
             {/* Badge */}
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-blue-500/30 bg-blue-500/10 text-blue-300 backdrop-blur-md mb-8">

@@ -117,13 +117,19 @@ export default function Footer() {
 
           <div className="flex items-center gap-6">
 
-            <button className="hover:text-white transition">
-              Privacy Policy
-            </button>
+            <Link
+  to="/about#privacy"
+  className="hover:text-white transition"
+>
+  Privacy Policy
+</Link>
 
-            <button className="hover:text-white transition">
-              Terms of Service
-            </button>
+<Link
+  to="/about#terms"
+  className="hover:text-white transition"
+>
+  Terms of Service
+</Link>
 
           </div>
         </div>

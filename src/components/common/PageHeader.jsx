@@ -1,4 +1,4 @@
-export default function DashboardHeader({
+export default function PageHeader({
   title,
   subtitle,
   color = "blue",

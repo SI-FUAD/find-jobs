@@ -1,147 +1,115 @@
-import { createContext, useContext, useEffect, useState } from "react";
+/* eslint-disable react-refresh/only-export-components */
+
+import {
+  createContext,
+  useContext,
+} from "react";
+
+import {
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 
 import api from "../api/axios";
 import endpoints from "../api/endpoints";
+import queryKeys from "../api/queryKeys";
+import { fetchAuth } from "../services/authService";
 
-const AuthContext = createContext();
+export const AuthContext = createContext();
+
+export const useAuth = () => useContext(AuthContext);
 
 export function AuthProvider({ children }) {
-  const [auth, setAuth] = useState(null);
-
-  const [authType, setAuthType] = useState(null);
-
-  const [loading, setLoading] = useState(true);
+  const queryClient = useQueryClient();
 
   /*
-  |--------------------------------------------------------------------------
-  | CHECK AUTH
-  |--------------------------------------------------------------------------
+  |------------------------------------------------------------------
+  | AUTH QUERY
+  |------------------------------------------------------------------
   */
 
-  const checkAuth = async () => {
-  try {
-    const token = localStorage.getItem("token");
+  const { data, isLoading } = useQuery({
+    queryKey: queryKeys.auth,
 
-    /*
-    |------------------------------------------------------------------
-    | NO TOKEN
-    |------------------------------------------------------------------
-    */
+    queryFn: fetchAuth,
 
-    if (!token) {
-      setAuth(null);
-      setAuthType(null);
+    staleTime: 1000 * 60 * 10,
 
-      return;
-    }
+    gcTime: 1000 * 60 * 30,
 
-    /*
-    |------------------------------------------------------------------
-    | REQUEST
-    |------------------------------------------------------------------
-    */
+    retry: false,
 
-    const response = await api.get(endpoints.home);
+    refetchOnWindowFocus: false,
 
-    /*
-    |------------------------------------------------------------------
-    | AUTH FOUND
-    |------------------------------------------------------------------
-    */
+    refetchOnReconnect: true,
+  });
 
-    if (response.data.auth) {
-      setAuth(response.data.auth);
+  const auth = data?.auth ?? null;
 
-      setAuthType(response.data.auth_type);
-    } else {
-      setAuth(null);
+  const authType =
+    data?.authType ?? null;
 
-      setAuthType(null);
-    }
-  } catch (error) {
-    console.error(error);
-
-    localStorage.removeItem("token");
-
-    setAuth(null);
-
-    setAuthType(null);
-  }
-};
+  const loading = isLoading;
 
   /*
-  |--------------------------------------------------------------------------
-  | INITIAL LOAD
-  |--------------------------------------------------------------------------
-  */
-
-  useEffect(() => {
-    const initializeAuth = async () => {
-      await checkAuth();
-
-      setLoading(false);
-    };
-
-    initializeAuth();
-  }, []);
-
-  /*
-  |--------------------------------------------------------------------------
+  |------------------------------------------------------------------
   | LOGIN
-  |--------------------------------------------------------------------------
+  |------------------------------------------------------------------
   */
 
   const login = async (token) => {
     localStorage.setItem("token", token);
 
-    await checkAuth();
+    await queryClient.invalidateQueries({
+      queryKey: queryKeys.auth,
+    });
   };
 
   /*
-  |--------------------------------------------------------------------------
+  |------------------------------------------------------------------
+  | REFETCH AUTH
+  |------------------------------------------------------------------
+  */
+
+  const refetchAuth = async () => {
+    await queryClient.invalidateQueries({
+      queryKey: queryKeys.auth,
+    });
+  };
+
+  /*
+  |------------------------------------------------------------------
   | LOGOUT
-  |--------------------------------------------------------------------------
+  |------------------------------------------------------------------
   */
 
   const logout = async () => {
-  try {
-    /*
-    |------------------------------------------------------------------
-    | COMPANY
-    |------------------------------------------------------------------
-    */
-
-    if (authType === "company") {
-      await api.post("/company/auth/logout");
+    try {
+      if (authType === "company") {
+        await api.post(
+          "/company/auth/logout"
+        );
+      } else {
+        await api.post(
+          endpoints.logout
+        );
+      }
+    } catch (error) {
+      console.error(error);
     }
 
     /*
-    |------------------------------------------------------------------
-    | USER / ADMIN
-    |------------------------------------------------------------------
+    |--------------------------------------------------------------
+    | CLEAR LOCAL DATA
+    |--------------------------------------------------------------
     */
 
-    else {
-      await api.post(endpoints.logout);
-    }
-  } catch (error) {
-    console.error(error);
-  }
+    localStorage.removeItem("token");
 
-  /*
-  |--------------------------------------------------------------------
-  | CLEAR LOCAL
-  |--------------------------------------------------------------------
-  */
+    queryClient.clear();
 
-  localStorage.removeItem("token");
-
-  setAuth(null);
-
-  setAuthType(null);
-
-  window.location.href = "/";
-};
+    window.location.href = "/";
+  };
 
   return (
     <AuthContext.Provider
@@ -151,12 +119,10 @@ export function AuthProvider({ children }) {
         loading,
         login,
         logout,
-        checkAuth,
+        refetchAuth,
       }}
     >
       {children}
     </AuthContext.Provider>
   );
 }
-
-export const useAuth = () => useContext(AuthContext);

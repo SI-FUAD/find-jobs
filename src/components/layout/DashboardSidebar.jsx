@@ -101,6 +101,7 @@ export default function DashboardSidebar({
             text-red-400
             hover:bg-red-500/10
             transition-all
+            cursor-pointer
           "
         >
           <LogOut size={18} />

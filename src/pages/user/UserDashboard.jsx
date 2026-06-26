@@ -1,34 +1,27 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+
+import queryKeys from "../../api/queryKeys";
 
 import api from "../../api/axios";
 import endpoints from "../../api/endpoints";
 
 import StatCard from "../../components/common/StatCard";
-import DashboardHeader from "../../components/common/DashboardHeader";
+import PageHeader from "../../components/common/PageHeader";
 
 export default function UserDashboard() {
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
+const { data, isLoading } = useQuery({
+  queryKey: queryKeys.userDashboard,
 
-  useEffect(() => {
-    const fetchDashboard = async () => {
-      try {
-        const response = await api.get(
-          endpoints.userDashboard
-        );
+  queryFn: async () => {
+    const response = await api.get(
+      endpoints.userDashboard
+    );
 
-        setData(response.data);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
-    };
+    return response.data;
+  },
+});
 
-    fetchDashboard();
-  }, []);
-
-  if (loading || !data) {
+  if (isLoading) {
     return (
       <div className="text-slate-600">
         Loading...
@@ -47,7 +40,7 @@ export default function UserDashboard() {
     <div className="space-y-8 md:space-y-10">
 
       {/* HEADER */}
-      <DashboardHeader
+      <PageHeader
   title="Dashboard Overview"
   subtitle="Track your applications and job activity in one place"
   color="blue"

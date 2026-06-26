@@ -1,4 +1,6 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+
+import queryKeys from "../../api/queryKeys";
 
 import {
   PieChart,
@@ -12,29 +14,23 @@ import {
 import api from "../../api/axios";
 import endpoints from "../../api/endpoints";
 
-import DashboardHeader from "../../components/common/DashboardHeader";
+import PageHeader from "../../components/common/PageHeader";
 import StatCard from "../../components/common/StatCard";
 
 export default function AdminAnalytics() {
-  const [data, setData] = useState(null);
+  const { data, isLoading } = useQuery({
+  queryKey: queryKeys.adminAnalytics,
 
-  useEffect(() => {
-    const fetchAnalytics = async () => {
-      try {
-        const response = await api.get(
-          endpoints.adminAnalytics
-        );
+  queryFn: async () => {
+    const response = await api.get(
+      endpoints.adminAnalytics
+    );
 
-        setData(response.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+    return response.data;
+  },
+});
 
-    fetchAnalytics();
-  }, []);
-
-  if (!data) {
+  if (isLoading) {
     return (
       <div className="text-slate-600">
         Loading...
@@ -54,7 +50,7 @@ export default function AdminAnalytics() {
 
       {/* Hero */}
 
-      <DashboardHeader
+      <PageHeader
   title="Admin Analytics"
   subtitle="Platform overview and performance metrics"
   color="green"

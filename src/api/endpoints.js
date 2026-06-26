@@ -24,6 +24,7 @@ const endpoints = {
 
   /* Company */
   companyDashboard: "/company/dashboard",
+  companyCreateJob: "/company/jobs",
   companyCandidates: "/company/candidates",
 
   /* Company Jobs */

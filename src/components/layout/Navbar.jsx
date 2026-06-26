@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/set-state-in-effect */
+
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 
 import {
@@ -152,7 +154,7 @@ export default function Navbar() {
               onClick={() =>
                 setDropdownOpen(!dropdownOpen)
               }
-              className="flex items-center gap-3"
+              className="flex items-center gap-3 cursor-pointer"
             >
               <div
                 className="w-11 h-11 rounded-full flex items-center justify-center text-white font-bold shadow-lg ring-2 ring-white/10"
@@ -178,7 +180,7 @@ export default function Navbar() {
               onClick={() =>
                 setDropdownOpen(!dropdownOpen)
               }
-              className="flex items-center gap-3 px-4 py-2 rounded-2xl text-white shadow-lg"
+              className="flex items-center gap-3 px-4 py-2 rounded-2xl text-white shadow-lg cursor-pointer"
               style={{
                 backgroundColor: auth.logo_color,
               }}
@@ -210,7 +212,7 @@ export default function Navbar() {
               onClick={() =>
                 setDropdownOpen(!dropdownOpen)
               }
-              className="flex items-center gap-3 px-4 py-2 rounded-2xl bg-emerald-600 text-white shadow-lg"
+              className="flex items-center gap-3 px-4 py-2 rounded-2xl bg-emerald-600 text-white shadow-lg cursor-pointer"
             >
               <ShieldCheck size={18} />
 
@@ -637,7 +639,7 @@ function DropdownItem({
   return (
     <button
       onClick={onClick}
-      className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl transition ${
+      className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl transition cursor-pointer ${
         danger
           ? "text-red-400 hover:bg-red-500/10"
           : "text-slate-200 hover:bg-white/5"
